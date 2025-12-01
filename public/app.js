@@ -10,6 +10,7 @@ const App = Vue.createApp({
 
 		const name = searchParams.get("name");
 		const chatEnabled = searchParams.get("chat") !== "false";
+		const autoEnter = searchParams.get("auto") === "true";
 
 		return {
 			channelId,
@@ -28,6 +29,7 @@ const App = Vue.createApp({
 			isScreenSharing: false,
 			peers: {},
 			dataChannels: {},
+			autoEnter,
 			chatEnabled,
 			chats: [],
 			chatMessage: "",
@@ -597,6 +599,12 @@ const App = Vue.createApp({
 	mounted() {
 		if (!this.callInitiated) {
 			this.getPreCallMedia();
+
+			if (this.autoEnter) {
+				setTimeout(() => {
+					this.initiateCall();
+				}, 3000); // 稍微延迟确保页面完全加载
+			}
 		}
 	},
 }).mount("#app");
